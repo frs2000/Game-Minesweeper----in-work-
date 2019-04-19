@@ -139,8 +139,68 @@ class Logic{
                         }
                     }
                 }                
-                //--------------------------------------
-		            // ...          
+                //--------------- upper left -----------------------
+                if (grid[i][c].equals(bombSymb)) {
+                    if ((i-1) >= 0 && (c-1) >= 0){
+                        if(!grid[i-1][c-1].equals("-")&& !grid[i-1][c-1].equals(bombSymb)) {
+                            int tempParam = Integer.parseInt(grid[i-1][c-1])   ;
+                            int tempParam2 = tempParam + 1 ;
+                            grid[i-1][c-1] = Integer.toString(tempParam2) ;                                                      
+                        }
+                    }
+                    if ((i-1) >= 0 && (c-1) >= 0 ){
+                        if(grid[i-1][c-1].equals("-")) {
+                            grid[i-1][c-1] = Integer.toString(1) ;                                                     
+                        }
+                    }
+                }
+                //--------------- upper right -----------------------
+                if (grid[i][c].equals(bombSymb)) {
+                    if ((i-1) >= 0 && (c+1)<= 8){
+                        if(!grid[i-1][c+1].equals("-")&& !grid[i-1][c+1].equals(bombSymb)) {
+                            int tempParam = Integer.parseInt(grid[i-1][c+1])   ;
+                            int tempParam2 = tempParam + 1 ;
+                            grid[i-1][c+1] = Integer.toString(tempParam2) ;                                                      
+                        }
+                    }
+                    if ((i-1) >= 0 && (c+1)<= 8){
+                        if(grid[i-1][c+1].equals("-")) {
+                            grid[i-1][c+1] = Integer.toString(1) ;                                                     
+                        }
+                    }
+                }
+                //--------------- left lower  -----------------------
+                if (grid[i][c].equals(bombSymb)) {
+                    if ((i+1)<= 8 && (c-1) >= 0){
+                        if(!grid[i+1][c-1].equals("-")&& !grid[i+1][c-1].equals(bombSymb)) {
+                            int tempParam = Integer.parseInt(grid[i+1][c-1])   ;
+                            int tempParam2 = tempParam + 1 ;
+                            grid[i+1][c-1] = Integer.toString(tempParam2) ;                                                      
+                        }
+                    }
+                    if ((i+1)<= 8 && (c-1) >= 0 ){
+                        if(grid[i+1][c-1].equals("-")) {
+                            grid[i+1][c-1] = Integer.toString(1) ;                                                     
+                        }
+                    }
+                }
+                //--------------- right lower  -----------------------
+                if (grid[i][c].equals(bombSymb)) {
+                    if ((i+1)<= 8 && (c+1)<= 8){
+                        if(!grid[i+1][c+1].equals("-")&& !grid[i+1][c+1].equals(bombSymb)) {
+                            int tempParam = Integer.parseInt(grid[i+1][c+1])   ;
+                            int tempParam2 = tempParam + 1 ;
+                            grid[i+1][c+1] = Integer.toString(tempParam2) ;                                                      
+                        }
+                    }
+                    if ((i+1)<= 8 && (c+1)<= 8 ){
+                        if(grid[i+1][c+1].equals("-")) {
+                            grid[i+1][c+1] = Integer.toString(1) ;                                                     
+                        }
+                    }
+                }
+                
+            //-----------------------------------------------        
             
             } 
         }
