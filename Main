@@ -1,6 +1,9 @@
 package Minesweeper;
 
-public class Main {
+import java.util.ArrayList;
+import java.util.HashMap;
+
+public class Main2 {
     public static void main(String[] args) {
         Logic logic = new Logic();
     }
@@ -14,6 +17,13 @@ class Logic{
     private String bombSymb = "*" ;
     private int muxСellsNumb; 
     private int[] randomNumbers; //for  positions of bombs
+    private ArrayList<Integer> setBomb ;
+    
+    private ArrayList<Integer> checkWhereWeSetBombsList ; // = ArrayList<Integer> setBomb
+    private ArrayList<Integer> freeCellsList ;    
+    private ArrayList<Integer> valueNearBombListPosition;
+    private ArrayList<Integer> valueNearBombListValue;
+
     
     public Logic(){
         a = 9 ;
@@ -22,49 +32,63 @@ class Logic{
         grid = new String [a][b]; 
         muxСellsNumb = a * b; // = 81
         randomNumbers = new int[numbOfBomb]; // = 10
-        setBombsToTheGaps();
+        setBomb = new ArrayList<>();
+        setBombsRec();
+        checkListAndMas(); //for checking
         setBomb();
         checkMatrix(); 
         setBorders() ;
         checkMatrix();
-    }
-    
-    private void setBombsToTheGaps(){ 
-        for(int i =0 ; i<randomNumbers.length ;  i++){
-            setBombsRec();
-            //System.out.println("randomNumbers["+i+"] = " + randomNumbers[i]);
-        }
-        //System.out.println(randomNumbers.length); 
         
+        checkWhereWeSetBombsList = new ArrayList<>();
+        freeCellsList = new ArrayList<>();        
+        valueNearBombListPosition = new ArrayList<>();
+        valueNearBombListValue = new ArrayList<>();
+        createLists();
+
     }
-    
+
     private void setBombsRec(){
-        int temp = (int)(Math.random()* muxСellsNumb) ;
-        //System.out.println("temp =" + temp);
-        for(int i =0 ; i<randomNumbers.length ;  i++){
-            if (randomNumbers[i] == temp ){
-                setBombsRec();
-                }
-            if (randomNumbers[i] != temp && randomNumbers[i]== 0){
-                randomNumbers[i] = temp ; 
-            System.out.println("potRec -- randomNumbers["+i+"] = " + randomNumbers[i]);
-                return;
-                }            
-        }       
+        int temp = (int)(Math.random()*muxСellsNumb) ;
+        System.out.println("temp =" + temp);
+        if (setBomb.contains(temp) && setBomb.size() < numbOfBomb){
+                setBombsRec();                
+                };
+        if (!setBomb.contains(temp) && setBomb.size() != numbOfBomb ){
+                setBomb.add(temp) ; 
+                System.out.println("setBomb.size() = " + setBomb.size()); 
+                randomNumbers[setBomb.size()-1] = temp;
+                if (setBomb.size() < numbOfBomb){
+                    setBombsRec();
+                    };
+        };  
+    }
+
+    
+    private void checkListAndMas(){
+        System.out.println("================================" );
+        for (int i = 0 ; i<setBomb.size(); i++){
+            System.out.println("setBomb.get(i) =" + setBomb.get(i));
+            System.out.println("randomNumbers (i) =" + randomNumbers[i]);
+        }
     }
     
     private void setBomb(){
+        System.out.println("================================" );
         for(int i =0 ; i<randomNumbers.length ;  i++){
-            int temp = randomNumbers[i] ;
-            int a1 =  temp/a;
-            System.out.println("a1 = " + a1);
-            int b1 =  temp - (a*a1);
-            System.out.println("b1 = " + b1);
+            int temp = randomNumbers[i]-1 ;
+            int a1 =  temp/a ;
+            System.out.println("Ряд  - a"+i+" = " + a1);
+            int b1 =  temp - (a*a1) ;
+            System.out.println("Столб - b"+i+" = " + b1);
             grid[a1][b1] = bombSymb ;
         }        
     }
     
    private void checkMatrix(){
+        System.out.println(" ");
+        System.out.println("================================" );
+        System.out.println(" ");
         for(int i =0 ; i<a ;  i++){
             for(int c =0 ; c<b ;  c++){
                 if (grid[i][c] == null) {grid[i][c] = "-" ;}
@@ -205,6 +229,60 @@ class Logic{
             } 
         }
     }
-}
+   
+    private void createLists(){
+        int tempNumb = 1;
+            for(int i =0 ; i<a ;  i++){
+                for(int c =0 ; c<b ;  c++){
+                    if (grid[i][c].equals("*")){
+                    checkWhereWeSetBombsList.add(tempNumb);
+                    }
+                    if (grid[i][c].equals("-")){
+                    freeCellsList.add(tempNumb);
+                    }
+                    if (!grid[i][c].equals("-") && !grid[i][c].equals("*")){
+                    valueNearBombListPosition.add(tempNumb);
+                    valueNearBombListValue.add(Integer.parseInt(grid[i][c]));
+                    }    
+                    tempNumb = tempNumb + 1 ;
+                }
+            }
+        printLists();   // - for checking
+    }
     
+    private void printLists(){
+        System.out.println("====================================");
+        System.out.println("checkWhereWeSetBombsList");
+        for (int i = 0 ; i <checkWhereWeSetBombsList.size(); i++ ){
+            System.out.print(checkWhereWeSetBombsList.get(i)+ " // ");
+        }
+        System.out.println("");
+        System.out.println("freeCellsList");
+        for (int i = 0 ; i <freeCellsList.size(); i++ ){
+            System.out.print(freeCellsList.get(i) + " // ");
+        }
+        System.out.println("");
+        System.out.println("valueNearBombList");
+        for (int i = 0 ; i <valueNearBombListPosition.size(); i++ ){
+            System.out.print(valueNearBombListPosition.get(i)+" = "+ valueNearBombListValue.get(i)+ " // ");
+        }
+    }
 
+    public ArrayList<Integer> getCheckWhereWeSetBombsList() {
+        return checkWhereWeSetBombsList;
+    }
+
+    public ArrayList<Integer> getFreeCellsList() {
+        return freeCellsList;
+    }
+
+    public ArrayList<Integer> getValueNearBombListPosition() {
+        return valueNearBombListPosition;
+    }
+
+    public ArrayList<Integer> getValueNearBombListValue() {
+        return valueNearBombListValue;
+    }
+
+            
+}
